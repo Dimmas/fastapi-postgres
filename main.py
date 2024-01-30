@@ -1,3 +1,4 @@
+import time
 import smtplib
 import jwt_guard
 from typing import List
@@ -97,7 +98,9 @@ async def delete_user(user_id: int, jwt_token: str = Depends(jwt_guard.has_acces
 @app.middleware("http")
 async def log_requests(request, call_next):
     logger.info(f"{request.method} {request.url.path}")
+    start_time = time.time()
     response = await call_next(request)
+    logger.info(f"Time took to process the request and return response is {time.time() - start_time} sec")
     return response
 
 
